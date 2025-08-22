@@ -10,19 +10,19 @@ void delay_ms_var(uint8_t ms) {
 
 // delay
 void del() {
-    delay_ms_var(read_pot(2)); // delaytime ms
+    delay_ms_var(read_pot(1)); // delaytime ms
 }
 
 void shift_init(shiftReg *sr) {
     // set pins to the appropriate bit on the register
-    sr->ser = 1 << PD4;
-    sr->oe = 1 << PD6;
-    sr->latch = 1 << PD7;
-    sr->clock = 1 << PB0;
+    sr->ser = 1 << PD2;
+    sr->oe = 1 << PD3;
+    sr->latch = 1 << PD4;
+    sr->clock = 1 << PD5;
 
     // setup pins as output on their appropriate register
-    DDRD |= sr->ser | sr->oe | sr->latch;
-    DDRB |= sr->clock; 
+    DDRD |= sr->ser | sr->oe | sr->latch | sr->clock;
+    
 
     oe_pwm(); // setup pwm channel for oe pin to control brightness
 }
@@ -42,21 +42,21 @@ uint8_t read_intn(uint8_t channel) {
 // control sr oe pin (all leds brightness) with OCR0A
 void oe_pwm() {
     // Fast PWM, non-inverting, 8-bit
-    TCCR0A = (1 << WGM00) | (1 << WGM01) | (1 << COM0A1);
-    TCCR0B = (1 << CS01);  // prescaler = 8
+    TCCR2A = (1 << WGM20) | (1 << WGM21) | (1 << COM2B1);
+    TCCR0B = (1 << CS21);  // prescaler = 8
 }
 
 // set brightness for leds as analog reading of pin A1 
 void set_brt() {
-    OCR0A = read_pot(1); // set brightness
+    OCR2B = read_pot(0); // set brightness
 }
 
 // 0 for clock, 1 for latch
 void pulse_pin(shiftReg *sr, uint8_t clk_latch) {
     switch (clk_latch) {
         case 0: // clock pin
-            PORTB |= sr->clock;
-            PORTB &= ~sr->clock;
+            PORTD |= sr->clock;
+            PORTD &= ~sr->clock;
             break;
         case 1: // latch pin
             PORTD |= sr->latch;
@@ -92,11 +92,11 @@ void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev) {
         // outer loop through number of LEDs
         for (int i = 0; i < bits; i++) {
             // check that switch states haven't changed, exit if it has
-            uint8_t interrupt = update_states(sw);
-            if (interrupt) {
-                return;
-            } else {
-                set_brt(); // set brightness
+            // uint8_t interrupt = update_stastes(sw);
+            // if (interrupt) {
+            //     return;
+            // } else {
+            //     set_brt(); // set brightness
                 // loop forward
                 for (int b = (bits - 1); b >= 0; b--) {
                     if (b == i) { // when current bit position (b) is same as current led (i), send a 1 to serial pin
@@ -105,19 +105,21 @@ void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev) {
                         PORTD &= ~sr->ser; // write a 0
                     }
                     pulse_pin(sr, 0); // shift clock
-                }
+                // }
             }
             pulse_pin(sr, 1); // shift latchs
-            del(); // delay
+//            del(); // delay
+            delay_ms_var(200);
+
         }
     } else { // REVERSE
         for (int i = bits; i >= 0; i--) {
         // read current states & return if change detected
-            uint8_t interrupt = update_states(sw);
-            if (interrupt) {
-                return;
-            } else {
-                set_brt(); // set brightness
+            // uint8_t interrupt = update_states(sw);
+            // if (interrupt) {
+            //     return;
+            // } else {
+            //     set_brt(); // set brightness
                 for (int b = (bits - 1); b > 0; b--) {
                     if (b == i) { // when current bit position (b) is same as current led (i), send a 1 to serial pin
                         PORTD |= sr->ser; // write a 1
@@ -126,9 +128,10 @@ void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev) {
                     }
                     pulse_pin(sr, 0); // pulse clock
                 }
-            }
+            // }
             pulse_pin(sr, 1); // pulse latch
-            del(); // delay
+            delay_ms_var(200);
+            // del(); // delay
         }
     }
 }

@@ -6,17 +6,17 @@
 #include <util/delay.h>
 
 typedef struct {
-    uint8_t intn; // intensity mode (only in chaser)
-    uint8_t seq; // sequence or solid
     uint8_t pwr; // power on off
+    uint8_t seq; // sequence or solid
+    uint8_t intn; // intensity mode (only in chaser)    
     uint8_t rev; // chaser reverse
     uint8_t rgb; // rgb on off
 } sw_states;
 
 typedef struct {
-    uint8_t intn_sw; // d2 - intensity
-    uint8_t seq_sw; // d3 - solid on or sequence
     uint8_t pwr_sw; // d5 - on off
+    uint8_t seq_sw; // d3 - solid on or sequence
+    uint8_t intn_sw; // d2 - intensity    
     uint8_t rev_sw; // a0 (a7)
     uint8_t rgb_sw; // a5 (a7)
     sw_states states;

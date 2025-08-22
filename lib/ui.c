@@ -2,11 +2,11 @@
 
 // setup digital pins (& analog A0 A5) for switches
 void switch_init(switches *sw) {
-    sw->intn_sw = 1 << PD2;
-    sw->seq_sw = 1 << PD3;
-    sw->pwr_sw = 1 << PD5;
-    sw->rev_sw = 1 << PC0;
-    sw->rgb_sw = 1 << PC5;
+    sw->pwr_sw = 1 << PB1;
+    sw->seq_sw = 1 << PB2;
+    sw->intn_sw = 1 << PB3;
+    sw->rev_sw = 1 << PB4;
+    sw->rgb_sw = 1 << PB5;
 }
 
 // setup analog pins
