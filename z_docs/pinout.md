@@ -1,4 +1,6 @@
 # arduino pinout
+## THIS WILL CHANGE - WILL EDIT PINOUT & ADD SCREEN
+
 # ui pins
 ## switches
 - power switch
