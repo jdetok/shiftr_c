@@ -10,7 +10,7 @@ void delay_ms_var(uint8_t ms) {
 
 // delay
 void del() {
-    delay_ms_var(read_pot(0)); // delaytime ms
+    delay_ms_var(read_pot(1)); // delaytime ms
 }
 
 void shift_init(shiftReg *sr) {
@@ -43,23 +43,12 @@ uint8_t read_d11(uint8_t channel) {
 void oe_pwm() {
     // Fast PWM, non-inverting, 8-bit
     TCCR2A = (1 << WGM20) | (1 << WGM21) | (1 << COM2B1);
-    // TCCR0B = (1 << CS21);  // prescaler = 8
-    // DDRD |= (1 << PD3);
-
-    // Fast PWM mode, 8-bit
-    // WGM22:0 = 3 → Fast PWM with TOP=0xFF
-    // TCCR2A = (1 << WGM20) | (1 << WGM21);
-
-    // Non-inverting mode on OC2B (D3)
-    // TCCR2A |= (1 << COM2B1);
-
-    // Prescaler = 64 → PWM frequency ≈ 976 Hz at 16 MHz
     TCCR2B = (1 << CS22);
 }
 
 // set brightness for leds as analog reading of pin A1 
 void set_brt() {
-    OCR2B = read_pot(1); // set brightness
+    OCR2B = read_pot(0); // set brightness
 }
 
 // 0 for clock, 1 for latch
