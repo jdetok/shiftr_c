@@ -1,12 +1,14 @@
 #include "ui.h"
 
-// setup digital pins (& analog A0 A5) for switches
+// setup digital pins d9-d13
 void switch_init(switches *sw) {
-    sw->pwr_sw = 1 << PB1;
-    sw->seq_sw = 1 << PB2;
-    sw->intn_sw = 1 << PB3;
-    sw->rev_sw = 1 << PB4;
-    sw->rgb_sw = 1 << PB5;
+    sw->d9_sw = 1 << PB1;
+    sw->d10_sw = 1 << PB2;
+    sw->d11_sw = 1 << PB3;
+    sw->d12_sw = 1 << PB4;
+    sw->d13_sw = 1 << PB5;
+    DDRB &= ~((1 << PB1) | (1 << PB2) | (1 << PB3) | (1 << PB4) | (1 << PB5));
+
 }
 
 // setup analog pins
@@ -37,30 +39,32 @@ uint16_t read_pot(uint8_t channel) {
     return val;  // 10-bit result (0–1023)
 }
 
-uint8_t get_state(uint8_t pin, char reg) {
-   if (reg == 'd') {
-        return PIND & pin;    
-   }
-   if (reg == 'c') {
-    return PINC & pin;
-   }
+uint8_t get_state(uint8_t pin) {
+    // return PINB & pin;
+    return (PINB & pin) ? 1 : 0;
+//    if (reg == 'd') {
+//         return PIND & pin;    
+//    }
+//    if (reg == 'c') {
+//     return PINC & pin;
+//    }
 }
 
 // TODO: new get_states() that accepts a pointer to a states struct & updates it
 // 1770 bytes before implementing
 
 void current_states(switches *sw) {
-    sw->states.pwr = get_state(sw->pwr_sw, 'd');
-    sw->states.seq = get_state(sw->seq_sw, 'd');
-    sw->states.intn = get_state(sw->intn_sw, 'd');
-    sw->states.rev = get_state(sw->rev_sw, 'c');
-    sw->states.rgb = get_state(sw->rgb_sw, 'c');
+    sw->states.d9 = get_state(sw->d9_sw);
+    sw->states.d10 = get_state(sw->d10_sw);
+    sw->states.d11 = get_state(sw->d11_sw);
+    sw->states.d12 = get_state(sw->d12_sw);
+    sw->states.d13 = get_state(sw->d13_sw);
 }
 
 // sum the states, use in update_states to determine whether there was a state change
 uint8_t sum_states(switches *sw) {
     return (
-        sw->states.pwr + sw->states.seq + sw->states.intn + sw->states.rev + sw->states.rgb);
+        sw->states.d9 + sw->states.d10 + sw->states.d11 + sw->states.d12 + sw->states.d13);
 }
 
 uint8_t update_states(switches *sw) {

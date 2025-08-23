@@ -5,13 +5,13 @@
 ## switches
 - power switch
     - d5 | PD5
-- sequence/solid mode switch
+- d10uence/solid mode switch
     - d3 | PD3
-- "intensity" (intn) switch
+- "intensity" (d11) switch
     - d2 | PD2
-- rgb on switch 
+- d13 on switch 
     - a0 | PC0
-- reverse chaser effect
+- d12erse chaser effect
     - a5 | PC5
 ## potentiometers
 - shift register LED brightness pot | bottommost pot
@@ -21,7 +21,7 @@
 - intensity pot | controls `num_sr` value passed to chaser | second from top
     - effectively 'adds' additional visual bits chasing as pot increases
     - a3 | PC3 | adc chan. 3
-- rgb brightness pot | topmost pot
+- d13 brightness pot | topmost pot
     - a4 | PC4 | adc chan. 4
 # 74HC595 shift register pins
 - serial pin | set a bit in the register
@@ -33,7 +33,7 @@
     - d7 | PD7 | set current bits to register
 - latch pin
     - d8 | PB0 | output bits in shift register to memory register
-# rgb pins
+# d13 pins
 ### all three pwm
 - red
     - d9 | PB1 | OCR1A = x to set (r)gb

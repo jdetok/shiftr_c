@@ -10,7 +10,7 @@ void delay_ms_var(uint8_t ms) {
 
 // delay
 void del() {
-    delay_ms_var(read_pot(1)); // delaytime ms
+    delay_ms_var(read_pot(0)); // delaytime ms
 }
 
 void shift_init(shiftReg *sr) {
@@ -28,7 +28,7 @@ void shift_init(shiftReg *sr) {
 }
 
 // read intensity switch, return value will be num_sr value in chaser
-uint8_t read_intn(uint8_t channel) {
+uint8_t read_d11(uint8_t channel) {
     uint16_t val = read_pot(channel);
     if (val < 50) {
         return 1;
@@ -43,12 +43,23 @@ uint8_t read_intn(uint8_t channel) {
 void oe_pwm() {
     // Fast PWM, non-inverting, 8-bit
     TCCR2A = (1 << WGM20) | (1 << WGM21) | (1 << COM2B1);
-    TCCR0B = (1 << CS21);  // prescaler = 8
+    // TCCR0B = (1 << CS21);  // prescaler = 8
+    // DDRD |= (1 << PD3);
+
+    // Fast PWM mode, 8-bit
+    // WGM22:0 = 3 → Fast PWM with TOP=0xFF
+    // TCCR2A = (1 << WGM20) | (1 << WGM21);
+
+    // Non-inverting mode on OC2B (D3)
+    // TCCR2A |= (1 << COM2B1);
+
+    // Prescaler = 64 → PWM frequency ≈ 976 Hz at 16 MHz
+    TCCR2B = (1 << CS22);
 }
 
 // set brightness for leds as analog reading of pin A1 
 void set_brt() {
-    OCR2B = read_pot(0); // set brightness
+    OCR2B = read_pot(1); // set brightness
 }
 
 // 0 for clock, 1 for latch
@@ -85,18 +96,18 @@ void onoff(shiftReg *sr, switches *sw, int num_sr, int on) {
     pulse_pin(sr, 1); // pulse latch
 }
 
-// TODO: new chaser accept readA0 output as param forward reverse
-void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev) {
+// TODO: new chaser accept readA0 output as param forward d12erse
+void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t d12) {
     int bits = num_sr * 8;
-    if (!rev) {
+    if (!d12) {
         // outer loop through number of LEDs
         for (int i = 0; i < bits; i++) {
             // check that switch states haven't changed, exit if it has
-            // uint8_t interrupt = update_stastes(sw);
-            // if (interrupt) {
-            //     return;
-            // } else {
-            //     set_brt(); // set brightness
+            uint8_t interrupt = update_states(sw);
+            if (interrupt) {
+                return;
+            } else {
+                set_brt(); // set brightness
                 // loop forward
                 for (int b = (bits - 1); b >= 0; b--) {
                     if (b == i) { // when current bit position (b) is same as current led (i), send a 1 to serial pin
@@ -105,22 +116,22 @@ void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev) {
                         PORTD &= ~sr->ser; // write a 0
                     }
                     pulse_pin(sr, 0); // shift clock
-                // }
+                }
             }
             pulse_pin(sr, 1); // shift latchs
-//            del(); // delay
-            delay_ms_var(200);
+           del(); // delay
+            // delay_ms_var(200);
 
         }
-    } else { // REVERSE
-        for (int i = bits; i >= 0; i--) {
+    } else { // d12ERSE
+        for (int i = bits; i > 0; i--) {
         // read current states & return if change detected
-            // uint8_t interrupt = update_states(sw);
-            // if (interrupt) {
-            //     return;
-            // } else {
-            //     set_brt(); // set brightness
-                for (int b = (bits - 1); b > 0; b--) {
+            uint8_t interrupt = update_states(sw);
+            if (interrupt) {
+                return;
+            } else {
+                set_brt(); // set brightness
+                for (int b = (bits); b > 0; b--) {
                     if (b == i) { // when current bit position (b) is same as current led (i), send a 1 to serial pin
                         PORTD |= sr->ser; // write a 1
                     } else {
@@ -128,10 +139,10 @@ void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev) {
                     }
                     pulse_pin(sr, 0); // pulse clock
                 }
-            // }
+            }
             pulse_pin(sr, 1); // pulse latch
-            delay_ms_var(200);
-            // del(); // delay
+            // delay_ms_var(100);
+            del(); // delay
         }
     }
 }
