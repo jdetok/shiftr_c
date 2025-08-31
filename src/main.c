@@ -32,7 +32,6 @@ int main() {
 
         // if (!get_state(sw.pwr_sw, 'd')) { // pwr_sw off
         if (!switch_state(&sw, PWR_SW)) { // pwr_sw off
-            // rgb_off();
             onoff(&sr, &sw, 6, 0, LCD); // all bits off
             continue; // break loop
         }
@@ -42,9 +41,6 @@ int main() {
         // use existing 2 bit state selector
         if (switch_state(&sw, SEQ_SW)) { // mode switch 
             if (switch_state(&sw, MOD_SW)) { // div switch        
-                // byte_chaser(&sr, &sw, NUM_SR, switch_state(&sw, REV_SW));
-            //    chaser(&sr, &sw, get_div_pot(sw.state), switch_state(&sw, REV_SW));
-            //    ;
                 mode_selector(&sr, &sw, get_mod_pot(sw.state), LCD);
             } else {
                 chaser(&sr, &sw, NUM_SR, switch_state(&sw, REV_SW), LCD);

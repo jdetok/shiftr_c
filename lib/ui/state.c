@@ -65,7 +65,7 @@ uint8_t check_state(switches *sw, uint8_t lcd) {
         lcd_print("|");
         
         lcd_goto(1, 11);
-        char dec[3];
+        char dec[4];
         itoa(sw->state, dec, 10);
         lcd_print(dec);
     }
