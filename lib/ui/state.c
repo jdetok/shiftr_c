@@ -31,7 +31,7 @@ void set_state(uint8_t *state, uint8_t pin, char reg, uint8_t bit) {
     }
 }
   
-uint8_t check_state(switches *sw) {
+uint8_t check_state(switches *sw, uint8_t lcd) {
     uint8_t cur_state = sw->state;
 
     // loop through switch_id enum to check state
@@ -46,9 +46,31 @@ uint8_t check_state(switches *sw) {
     sw->state &= ~MOD_POT_MASK;
     sw->state |= (mod << MOD_POT_SHIFT);
 
-    // TODO: RGB POT STATE
+    uint8_t change = (sw->state != cur_state) ? 1 : 0;
+    if (change) {
+        lcd_clear();
+        lcd_goto(0, 0);
+        lcd_print("state bitfields:"); // maybe bit too
+        lcd_goto(1, 0);
 
-    return (sw->state != cur_state) ? 1 : 0;
+        char bin[9];
+        for (int i = 7; i >= 0; i--) {
+            bin[7 - i] = (sw->state & (1 << i)) ? '1' : '0';
+        }
+        bin[8] = '\0';
+        // itoa(sw->state, buf, 2);
+        lcd_print(bin);
+
+        lcd_goto(1, 9);
+        lcd_print("|");
+        
+        lcd_goto(1, 11);
+        char dec[3];
+        itoa(sw->state, dec, 10);
+        lcd_print(dec);
+    }
+    return change;
+    // return (sw->state != cur_state) ? 1 : 0;
 }
 
 uint8_t get_mod_pot(uint8_t state) {

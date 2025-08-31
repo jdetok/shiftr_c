@@ -2,8 +2,11 @@
 #define UI_H
 
 #include <stdint.h>
+#include <stdlib.h>
 #include <avr/io.h> 
 #include <util/delay.h>
+
+#include "../lcd/lcd.h"
 
 // digital pins for switches
 // defined with PCB layout - may be different using proto board
@@ -62,7 +65,7 @@ void pot_init(); // setup potentiometers to utilize PWM
 void oe_pwm(); // setup PWM channels
 void switch_init(switches *sw); // setup switches
 void set_state(uint8_t *state, uint8_t pin, char reg, uint8_t bit); // set bit
-uint8_t check_state(switches *sw);
+uint8_t check_state(switches *sw, uint8_t lcd);
 uint8_t switch_state(switches *sw, switch_id id);
 uint8_t read_pot(uint8_t channel); // returns 0 - 244
 uint8_t read_mod_pot(); // writes 1-3 to bits 5-6 in state byte

@@ -1,15 +1,15 @@
 #include "shift.h"
 
-void mode_selector(shiftReg *sr, switches *sw, uint8_t mode) {
+void mode_selector(shiftReg *sr, switches *sw, uint8_t mode, uint8_t lcd) {
     switch (mode) {
     case 1:
-        chaser(sr, sw, 2, switch_state(sw, REV_SW));
+        chaser(sr, sw, 2, switch_state(sw, REV_SW), lcd);
         break;
     case 2:
-        chaser(sr, sw, 3, switch_state(sw, REV_SW));
+        chaser(sr, sw, 3, switch_state(sw, REV_SW), lcd);
         break;
     case 3:
-        byte_chaser(sr, sw, NUM_SR, switch_state(sw, REV_SW));        
+        byte_chaser(sr, sw, NUM_SR, switch_state(sw, REV_SW), lcd);        
         break;
     }
     
@@ -63,12 +63,12 @@ void pulse_pin(shiftReg *sr, uint8_t clk_latch) {
     }
 }
 
-// turn off all lights
-void onoff(shiftReg *sr, switches *sw, int num_sr, int on) {
+// turn off all lights // lcd 0 or 1 to enable prints
+void onoff(shiftReg *sr, switches *sw, int num_sr, int on, uint8_t lcd) {
     int bits = num_sr * 8;
     for (int i = 0; i < bits; i++) {
         // uint8_t interrupt = update_states(sw);
-        uint8_t interrupt = check_state(sw);
+        uint8_t interrupt = check_state(sw, lcd);
         if (interrupt) {
             return;
         } else {
@@ -85,11 +85,11 @@ void onoff(shiftReg *sr, switches *sw, int num_sr, int on) {
 }
 
 // optimized chaser func
-void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev) {
+void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev, uint8_t lcd) {
     uint8_t bits = num_sr * 8;
     uint64_t bitmask = rev ? (1ULL << (bits - 1)) : 1ULL;
     for (uint64_t i = 0; i < bits; i++) {
-        uint8_t interrupt = check_state(sw);
+        uint8_t interrupt = check_state(sw, lcd);
         if (interrupt) {
             return; // return if state changed
         } else {
@@ -109,14 +109,14 @@ void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev) {
     } 
 }
 
-void byte_chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev) {
+void byte_chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev, uint8_t lcd) {
     uint8_t bits = num_sr * 8;
     uint64_t bitmask = rev ? (0xFFULL << (bits - 8)) : 0xFFULL;
     
     // outer loop through number of shift registers
     for (int i = 0; i < num_sr; i++) {
         // check that switch states haven't changed, exit if it has
-        uint8_t interrupt = check_state(sw);
+        uint8_t interrupt = check_state(sw, lcd);
         if (interrupt) {
             return;
         } else {
