@@ -3,41 +3,40 @@
 
 # ui pins
 ## switches
-- power switch
-    - d5 | PD5
-- d10uence/solid mode switch
-    - d3 | PD3
-- "intensity" (d11) switch
-    - d2 | PD2
-- d13 on switch 
-    - a0 | PC0
-- d12erse chaser effect
-    - a5 | PC5
+- d9
+    - alt switch no purpose now
+        - rgb switch on bronto
+    - PB1
+- d10 
+    - SEQUENCE MODE SWITCH
+    - when on, reads sequence mode pot
+    - PB2
+- d11
+    - REVERSE SEQUENCE SWITCH
+    - PB3
+- d12
+    - SEQUENCE SWITCH ON/SEQUENCE
+    - PB4
+- d13
+    - POWER SWITCH
+    - PB5
 ## potentiometers
-- shift register LED brightness pot | bottommost pot
+- shift register LED brightness pot
+    - a0 | PC0 | adc chan. 0
+- seq mode pot
+    - chaser mode when seq mode switch is on
     - a1 | PC1 | adc chan. 1
-- speed pot | speed for chaser effect | second from bottom 
+- alt pot
     - a2 | PC2 | adc chan. 2
-- intensity pot | controls `num_sr` value passed to chaser | second from top
-    - effectively 'adds' additional visual bits chasing as pot increases
+- speed pot | speed for chaser effect 
     - a3 | PC3 | adc chan. 3
-- d13 brightness pot | topmost pot
-    - a4 | PC4 | adc chan. 4
 # 74HC595 shift register pins
 - serial pin | set a bit in the register
-    - d4 | PD4
+    - d2 | PD2
 - output enable (oe) pin
-    - d6 | PD6 | OCR0A = x to set shift register LED brightness
+    - d3 | PD3 | OCR2B = x to set shift register LED brightness
     * pwm, controls led brightness
 - clock pin 
-    - d7 | PD7 | set current bits to register
+    - d4 | PD4 | set current bits to register
 - latch pin
-    - d8 | PB0 | output bits in shift register to memory register
-# d13 pins
-### all three pwm
-- red
-    - d9 | PB1 | OCR1A = x to set (r)gb
-- green
-    - d10 | PB2 | OCR1B = x to set r(g)b
-- blue
-    - d11 | PB3 | OCR2A = x to set rg(b)
+    - d5 | PD5 | output bits in shift register to memory register
