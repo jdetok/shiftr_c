@@ -61,6 +61,17 @@ void lcd_clear(void) {
     _delay_ms(2);
 }
 
+// clear, goto, print
+void lcd_clr_print(uint8_t row, uint8_t col, const char *str) {
+    lcd_clear();
+    lcd_goto(row, col);
+    lcd_print(str);
+}
+void lcd_goto_print(uint8_t row, uint8_t col, const char *str) {
+    lcd_goto(row, col);
+    lcd_print(str);
+}
+
 void lcd_init(void) {
     // configure pins as outputs
     SR_SER_DDR   |= (1 << SR_SER_PIN);

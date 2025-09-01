@@ -10,11 +10,11 @@
 
 // digital pins for switches
 // defined with PCB layout - may be different using proto board
-#define PWR_PIN (1 << PB5) // digital pin 12
-#define SEQ_PIN (1 << PB4) // digital pin 12
-#define REV_PIN (1 << PB3) // digital pin 11
-#define MOD_PIN (1 << PB2) // digital pin 10
-#define RGB_PIN (1 << PB1) //  digital pin 9
+#define PWR_PIN (1 << PB5) // digital pin 13
+// #define SEQ_PIN (1 << PB4) // digital pin 12
+// #define REV_PIN (1 << PB3) // digital pin 11
+// #define MOD_PIN (1 << PB2) // digital pin 10
+// #define RGB_PIN (1 << PB1) //  digital pin 9
 
 // ADC channels correlating with analog pins
 #define BRT_POT 0

@@ -8,10 +8,10 @@ void switch_init(switches *sw) {
     *sw = (switches){
         .switches = {
             {.pin = PWR_PIN, .bit = PWR_BIT, .reg = 'b'},
-            {.pin = SEQ_PIN, .bit = SEQ_BIT, .reg = 'b'},
-            {.pin = REV_PIN, .bit = REV_BIT, .reg = 'b'},
-            {.pin = MOD_PIN, .bit = MOD_BIT, .reg = 'b'},
-            {.pin = RGB_PIN, .bit = RGB_BIT, .reg = 'b'},
+            // {.pin = SEQ_PIN, .bit = SEQ_BIT, .reg = 'b'},
+            // {.pin = REV_PIN, .bit = REV_BIT, .reg = 'b'},
+            // {.pin = MOD_PIN, .bit = MOD_BIT, .reg = 'b'},
+            // {.pin = RGB_PIN, .bit = RGB_BIT, .reg = 'b'},
         },
         .state = 0
     };
