@@ -1,5 +1,5 @@
 #include "shift.h"
-
+/*
 void mode_selector(shiftReg *sr, switches *sw, uint8_t mode, uint8_t lcd) {
     switch (mode) {
     case 1:
@@ -14,7 +14,7 @@ void mode_selector(shiftReg *sr, switches *sw, uint8_t mode, uint8_t lcd) {
     }
     
 }
-
+*/
 // required to accept delay time as a variable from pot
 // _delay_ms() only accepts a compile time constant
 void delay_ms_var(uint8_t ms) {

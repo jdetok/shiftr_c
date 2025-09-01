@@ -41,10 +41,10 @@
 // enum for switches 
 typedef enum {
     PWR_SW,
-    SEQ_SW,
-    REV_SW,
-    MOD_SW,
-    RGB_SW,
+    // SEQ_SW,
+    // REV_SW,
+    // MOD_SW,
+    // RGB_SW,
     SW_COUNT
 } switch_id;
 
@@ -57,7 +57,7 @@ typedef struct {
 
 // struct to hold swithes - holds array of switches & state byte
 typedef struct {
-    switch_two_pos switches[5];
+    switch_two_pos switches[1];
     uint8_t state; // use bitfields for state
 } switches;
 
