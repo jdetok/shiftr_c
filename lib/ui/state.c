@@ -47,28 +47,28 @@ uint8_t check_state(switches *sw, uint8_t lcd) {
     sw->state |= (mod << MOD_POT_SHIFT);
 
     uint8_t change = (sw->state != cur_state) ? 1 : 0;
-    if (change) {
-        lcd_clear();
-        lcd_goto(0, 0);
-        lcd_print("state bitfields:"); // maybe bit too
-        lcd_goto(1, 0);
+    // if (change) {
+    //     lcd_clear();
+    //     lcd_goto(0, 0);
+    //     lcd_print("state bitfields:"); // maybe bit too
+    //     lcd_goto(1, 0);
 
-        char bin[9];
-        for (int i = 7; i >= 0; i--) {
-            bin[7 - i] = (sw->state & (1 << i)) ? '1' : '0';
-        }
-        bin[8] = '\0';
-        // itoa(sw->state, buf, 2);
-        lcd_print(bin);
+    //     char bin[9];
+    //     for (int i = 7; i >= 0; i--) {
+    //         bin[7 - i] = (sw->state & (1 << i)) ? '1' : '0';
+    //     }
+    //     bin[8] = '\0';
+    //     // itoa(sw->state, buf, 2);
+    //     lcd_print(bin);
 
-        lcd_goto(1, 9);
-        lcd_print("|");
+    //     lcd_goto(1, 9);
+    //     lcd_print("|");
         
-        lcd_goto(1, 11);
-        char dec[4];
-        itoa(sw->state, dec, 10);
-        lcd_print(dec);
-    }
+    //     lcd_goto(1, 11);
+    //     char dec[4];
+    //     itoa(sw->state, dec, 10);
+    //     lcd_print(dec);
+    // }
     return change;
     // return (sw->state != cur_state) ? 1 : 0;
 }

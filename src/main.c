@@ -33,16 +33,16 @@ int main() {
     // MAIN LOOP
     while (1) {
         now++; // increment timing
-        set_brt();
+        // set_brt();
         check_btns(&btns);
         
         // if (!get_state(sw.pwr_sw, 'd')) { // pwr_sw off
-        // if (!switch_state(&sw, PWR_SW)) { // pwr_sw off
-        //     onoff(&sr, &sw, 6, 0, LCD); // all bits off
-        //     continue; // break loop
-        // } else {
-        //     onoff(&sr, &sw, NUM_SR, 1, LCD); // all bits on
-        // }
+        if (!switch_state(&sw, PWR_SW)) { // pwr_sw off
+            onoff(&sr, &sw, 6, 0, LCD); // all bits off
+            continue; // break loop
+        } else {
+            onoff(&sr, &sw, NUM_SR, 1, LCD); // all bits on
+        }
 
         // TODO: move chase mode logic to separate func
         // div pot should edit switch between byte chaser and bit chaser/div
@@ -56,6 +56,6 @@ int main() {
         // // sequence off, all lights on
         // } else {
         //     onoff(&sr, &sw, NUM_SR, 1, LCD); // all bits on
-        // }
+        }
     }
-}
+// }
