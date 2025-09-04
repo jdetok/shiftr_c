@@ -109,14 +109,14 @@ void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev, uint8_t lcd) {
     } 
 }
 
-void byte_chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev, uint8_t lcd) {
+void byte_chaser(shiftReg *sr, inputs *ui, int num_sr, uint8_t rev, uint8_t lcd) {
     uint8_t bits = num_sr * 8;
     uint64_t bitmask = rev ? (0xFFULL << (bits - 8)) : 0xFFULL;
     
     // outer loop through number of shift registers
     for (int i = 0; i < num_sr; i++) {
         // check that switch states haven't changed, exit if it has
-        uint8_t interrupt = check_state(sw, lcd);
+        uint8_t interrupt = check_state(&ui->sw, lcd);
         if (interrupt) {
             return;
         } else {
@@ -136,6 +136,9 @@ void byte_chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev, uint8_t lc
         del(); // delay
         bitmask = rev ? (bitmask >> 8ULL) : (bitmask << 8ULL);
         // bitmask <<= 8ULL;/
+        if (!(&ui->btns.btn[0].state)) {
+            return;
+        }
     }
 }
 /*

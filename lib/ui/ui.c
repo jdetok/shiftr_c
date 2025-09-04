@@ -11,9 +11,7 @@ inputs ui_init() {
     switch_init(&sw);
 
     // inputs ui = {btns, sw};
-    return (inputs){
-        btns, sw
-    };
+    return (inputs){.btns = btns, .sw = sw};
 }
 
 // setup digital pins (& analog A0 A5) for switches

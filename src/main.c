@@ -36,7 +36,8 @@ int main() {
     while (1) {
         now++; // increment timing
         // set_brt();
-        check_btns(&btns);
+        // check_btns(&btns);
+        check_btns(&ui.btns);
         
         // if (!get_state(sw.pwr_sw, 'd')) { // pwr_sw off
         if (!switch_state(&sw, PWR_SW)) { // pwr_sw off
@@ -44,8 +45,8 @@ int main() {
             continue; // break loop
         } else {
             // if (btns.state & btns.btn[0].sr_pos) {
-            if (btns.btn[0].state) {
-                byte_chaser(&sr, &sw, NUM_SR, (btns.state & btns.btn[6].sr_pos), 0);
+            if (ui.btns.btn[0].state) {
+                byte_chaser(&sr, &ui, NUM_SR, (btns.state & btns.btn[6].sr_pos), 0);
             } else if (btns.state & btns.btn[7].sr_pos) {
                 chaser(&sr, &sw, NUM_SR, (btns.state & btns.btn[6].sr_pos), 0);
             } else {
