@@ -17,7 +17,8 @@ void btns_init(buttons *btns) {
             {.sr_pos = (1 << SH6), .state = 0, .name = "t7"},
             {.sr_pos = (1 << SH7), .state = 0, .name = "t8"}
         }, 
-        .state = 0
+        .state = 0,
+        .prev_state = 0
     };
 
     DDRB |= CE_PIN | CLK_PIN | PL_PIN; // input sr output pins
@@ -37,7 +38,7 @@ void check_btns(buttons *btns) {
 
         for (uint8_t i = SH0; i < BTN_CNT; i++) {    
             if (state & (btns->btn[i].sr_pos) && !(btns->state & (btns->btn[i].sr_pos))) {
-                btns->btn[i].state ^= 1;
+                btns->btn[i].state ^= 1; // think i can do btns.state ^= (1 << sr_pos)
                 lcd_goto_print(1, 0, btns->btn[i].name);
                 lcd_goto_print(1, 3, "state: ");
                 char buf[2];
@@ -49,6 +50,31 @@ void check_btns(buttons *btns) {
     }
 }
 
+uint8_t btns_state(buttons *btns) {
+    uint8_t prev = btns->prev_state;
+    uint8_t state = hc165_read();
+
+    uint8_t rising = ((~prev) & state); // xor to detect changes
+
+    btns->prev_state = state;
+
+    if (rising) {
+        for (uint8_t i = SH0; i < BTN_CNT; i++) {    
+            if (rising & btns->btn[i].sr_pos) {
+                btns->state ^= btns->btn[i].sr_pos;
+            }
+        }
+        return 1;
+        }
+    return 0;
+}
+
+uint8_t btn_state(buttons *btns, uint8_t btn) {
+    if (btns_state(btns) && (btns->state & btns->btn[btn].sr_pos)) {    
+        return 1;
+    }
+    return 0;
+}
 
 uint8_t hc165_read(void) {
     uint8_t val = 0;

@@ -64,11 +64,11 @@ void pulse_pin(shiftReg *sr, uint8_t clk_latch) {
 }
 
 // turn off all lights // lcd 0 or 1 to enable prints
-void onoff(shiftReg *sr, switches *sw, int num_sr, int on, uint8_t lcd) {
+void onoff(shiftReg *sr, inputs *ui, int num_sr, int on, uint8_t lcd) {
     int bits = num_sr * 8;
     for (int i = 0; i < bits; i++) {
         // uint8_t interrupt = update_states(sw);
-        uint8_t interrupt = check_state(sw, lcd);
+        uint8_t interrupt = check_state(&ui->sw, lcd);
         if (interrupt) {
             return;
         } else {
@@ -85,13 +85,15 @@ void onoff(shiftReg *sr, switches *sw, int num_sr, int on, uint8_t lcd) {
 }
 
 // optimized chaser func
-void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev, uint8_t lcd) {
+void chaser(shiftReg *sr, inputs *ui, int num_sr, uint8_t rev, uint8_t lcd) {
     uint8_t bits = num_sr * 8;
     uint64_t bitmask = rev ? (1ULL << (bits - 1)) : 1ULL;
     for (uint64_t i = 0; i < bits; i++) {
-        uint8_t interrupt = check_state(sw, lcd);
+        uint8_t interrupt = check_state(&ui->sw, lcd);
         if (interrupt) {
             return; // return if state changed
+        } else if (btn_state(&ui->btns, SH7) || (btn_state(&ui->btns, SH6))) { // todo check state pass button
+            return;
         } else {
             set_brt(); // set brightness
             for (int b = (bits - 1); b >= 0; b--) {
@@ -101,6 +103,9 @@ void chaser(shiftReg *sr, switches *sw, int num_sr, uint8_t rev, uint8_t lcd) {
                     PORTD &= ~sr->ser;
                 }
                 pulse_pin(sr, 0);
+                if (btn_state(&ui->btns, SH7) || (btn_state(&ui->btns, SH6))) { // todo check state pass button
+                   return;
+                }
             }
         }
         pulse_pin(sr, 1);
@@ -136,7 +141,8 @@ void byte_chaser(shiftReg *sr, inputs *ui, int num_sr, uint8_t rev, uint8_t lcd)
         del(); // delay
         bitmask = rev ? (bitmask >> 8ULL) : (bitmask << 8ULL);
         // bitmask <<= 8ULL;/
-        if (!(&ui->btns.btn[0].state)) {
+        // if (!(&ui->btns.btn[0].state)) {
+        if (btn_state(&ui->btns, SH0)) {
             return;
         }
     }

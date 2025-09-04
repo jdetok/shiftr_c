@@ -37,20 +37,27 @@ int main() {
         now++; // increment timing
         // set_brt();
         // check_btns(&btns);
-        check_btns(&ui.btns);
-        
+        btns_state(&ui.btns);
+        char binval[9];
+        for (int b = 7; b >= 0; b--) {
+            binval[7 - b] = (ui.btns.state & (1 << b)) ? '1' : '0';
+        }
+        binval[8] = '\0';
+
+        lcd_goto_print(0, 0, binval);
         // if (!get_state(sw.pwr_sw, 'd')) { // pwr_sw off
-        if (!switch_state(&sw, PWR_SW)) { // pwr_sw off
-            onoff(&sr, &sw, 6, 0, LCD); // all bits off
+        if (!switch_state(&ui.sw, PWR_SW)) { // pwr_sw off
+            onoff(&sr, &ui, 6, 0, LCD); // all bits off
             continue; // break loop
         } else {
             // if (btns.state & btns.btn[0].sr_pos) {
-            if (ui.btns.btn[0].state) {
-                byte_chaser(&sr, &ui, NUM_SR, (btns.state & btns.btn[6].sr_pos), 0);
-            } else if (btns.state & btns.btn[7].sr_pos) {
-                chaser(&sr, &sw, NUM_SR, (btns.state & btns.btn[6].sr_pos), 0);
+            if (ui.btns.state & ui.btns.btn[0].sr_pos) {
+            // if (btn_state(&btns, SH0)) {
+                byte_chaser(&sr, &ui, NUM_SR, (ui.btns.state & ui.btns.btn[6].sr_pos), 0);
+            } else if (ui.btns.state & ui.btns.btn[7].sr_pos) {
+                chaser(&sr, &ui, NUM_SR, (ui.btns.state & ui.btns.btn[6].sr_pos), 0);
             } else {
-                onoff(&sr, &sw, NUM_SR, 1, LCD); // all bits on
+                onoff(&sr, &ui, NUM_SR, 1, LCD); // all bits on
             }
         }
 

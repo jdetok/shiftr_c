@@ -86,6 +86,7 @@ typedef struct {
 typedef struct {
     button btn[8];
     uint8_t state;
+    uint8_t prev_state;
 } buttons;
 
 typedef struct {
@@ -94,6 +95,8 @@ typedef struct {
 } inputs;
 
 inputs ui_init();
+uint8_t btns_state(buttons *btns);
+uint8_t btn_state(buttons *btns, uint8_t btn);
 void pot_init(); // setup potentiometers to utilize PWM
 void oe_pwm(); // setup PWM channels
 void switch_init(switches *sw); // setup switches
