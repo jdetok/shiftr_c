@@ -5,6 +5,8 @@
 // state for all five switches & the top two (MOD_POT & RGB_POT) are stored
 // as bitfields - all states are stored within 7 bits
 
+// TODO: store buttons states in btns.state byte
+
 // check if bit for pin is set in state
 uint8_t switch_state(switches *sw, switch_id id) {
     if (id >= SW_COUNT) return 0;
@@ -30,11 +32,14 @@ void set_state(uint8_t *state, uint8_t pin, char reg, uint8_t bit) {
         *state &= ~bit;
     }
 }
-  
+
+
 uint8_t check_state(switches *sw, uint8_t lcd) {
     uint8_t cur_state = sw->state;
 
     // loop through switch_id enum to check state
+
+    // DON'T WANT TO DO THIS ANYMORE, ONLY ONE SWITCH
     for (switch_id i = 0; i < SW_COUNT; i++) {
         set_state(&sw->state, sw->switches[i].pin,
             sw->switches[i].reg,
@@ -42,6 +47,8 @@ uint8_t check_state(switches *sw, uint8_t lcd) {
     }
 
     // set 1 2 or 3 from read_div_pot to bits 5 and 6
+
+    // LEGACY BRONTO - NOT NEEDED
     uint8_t mod = read_mod_pot();
     sw->state &= ~MOD_POT_MASK;
     sw->state |= (mod << MOD_POT_SHIFT);

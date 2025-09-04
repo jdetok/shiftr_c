@@ -38,13 +38,28 @@
 #define MOD_POT_SHIFT 5 
 #define MOD_POT_MASK (0b11 << MOD_POT_SHIFT)
 
+// BUTTONS inputs shift register 74HC165 pins 
+#define CE_PIN (1 << PB1) // D9 | chip pin 15 
+#define DATA_PIN (1 << PB2) // D10 | chip pin 7
+#define CLK_PIN (1 << PB3) // D11 | chip pin 2
+#define PL_PIN (1 << PB4) // D12 | chip pin 1 | referred to as load sometimes
+
+// buttons
+typedef enum {
+    SH0,
+    SH1,
+    SH2,
+    SH3,
+    SH4,
+    SH5,
+    SH6,
+    SH7,
+    BTN_CNT // number of buttons (8)
+} btn_id;
+
 // enum for switches 
 typedef enum {
     PWR_SW,
-    // SEQ_SW,
-    // REV_SW,
-    // MOD_SW,
-    // RGB_SW,
     SW_COUNT
 } switch_id;
 
@@ -60,7 +75,25 @@ typedef struct {
     switch_two_pos switches[1];
     uint8_t state; // use bitfields for state
 } switches;
+// KEEP D13 FOR POWER SW, BUTTONS D9-D12
 
+typedef struct {
+    uint8_t sr_pos;
+    uint8_t state;
+    char *name;
+} button;
+
+typedef struct {
+    button btn[8];
+    uint8_t state;
+} buttons;
+
+typedef struct {
+    buttons btns;
+    switches sw;
+} inputs;
+
+inputs ui_init();
 void pot_init(); // setup potentiometers to utilize PWM
 void oe_pwm(); // setup PWM channels
 void switch_init(switches *sw); // setup switches
@@ -71,5 +104,10 @@ uint8_t read_pot(uint8_t channel); // returns 0 - 244
 uint8_t read_mod_pot(); // writes 1-3 to bits 5-6 in state byte
 uint8_t get_mod_pot(uint8_t state); // gets bits 5-6 for mode_selector (shift.h)
 uint8_t read_rgb_brt(); // returns brightness divider for rgb pulse func
+
+uint8_t hc165_read(void);
+static void hc165_pulse(volatile uint8_t *port, uint8_t pin);
+void check_btns(buttons *btns);
+void btns_init(buttons *btns);
 
 #endif

@@ -3,6 +3,7 @@
         "*.erd": "json",
         "*.vuerd": "json",
         ".envdev": "properties",
-        "lcd.h": "c"
+        "lcd.h": "c",
+        "btns.h": "c"
     }
 }

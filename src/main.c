@@ -3,7 +3,7 @@
 #include "../lib/shift/shift.h"
 #include "../lib/ui/ui.h"
 #include "../lib/lcd/lcd.h"
-#include "../lib/btns/btns.h"
+// #include "../lib/btns/btns.h"
 
 #define LCD 1 // change to 0 if no lcd screen connected
 
@@ -14,6 +14,8 @@ int main() {
 
     buttons btns;
     btns_init(&btns);
+
+    inputs ui = ui_init();
 
     // setup digital pins (d4, d6, d7, d8) for shift register
     shiftReg sr;
@@ -41,7 +43,14 @@ int main() {
             onoff(&sr, &sw, 6, 0, LCD); // all bits off
             continue; // break loop
         } else {
-            onoff(&sr, &sw, NUM_SR, 1, LCD); // all bits on
+            // if (btns.state & btns.btn[0].sr_pos) {
+            if (btns.btn[0].state) {
+                byte_chaser(&sr, &sw, NUM_SR, (btns.state & btns.btn[6].sr_pos), 0);
+            } else if (btns.state & btns.btn[7].sr_pos) {
+                chaser(&sr, &sw, NUM_SR, (btns.state & btns.btn[6].sr_pos), 0);
+            } else {
+                onoff(&sr, &sw, NUM_SR, 1, LCD); // all bits on
+            }
         }
 
         // TODO: move chase mode logic to separate func

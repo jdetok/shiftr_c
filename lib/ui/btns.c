@@ -1,4 +1,4 @@
-#include "btns.h"
+#include "ui.h"
 
 static void hc165_pulse(volatile uint8_t *port, uint8_t pin) {
     *port |=  pin;
@@ -61,8 +61,6 @@ uint8_t hc165_read(void) {
     PORTB &= ~CE_PIN; // clock enable low (active)
 
     for (uint8_t i = 0; i < 8; i++) {
-        // PORTD |= CLK_PIN; // clock in high
-
         val <<= 1; // left shift 1
 
         if (PINB & DATA_PIN) {

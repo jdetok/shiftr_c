@@ -3,6 +3,19 @@
 // ui.c
 // INITALIZE UI COMPONENTS
 
+inputs ui_init() {
+    buttons btns;
+    switches sw;
+
+    btns_init(&btns);
+    switch_init(&sw);
+
+    // inputs ui = {btns, sw};
+    return (inputs){
+        btns, sw
+    };
+}
+
 // setup digital pins (& analog A0 A5) for switches
 void switch_init(switches *sw) {
     *sw = (switches){
