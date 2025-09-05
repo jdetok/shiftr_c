@@ -1,7 +1,7 @@
 #include <avr/io.h> 
 #include <util/delay.h>
 #include "../lib/shift/shift.h"
-#include "../lib/ui/ui.h"
+#include "../lib/state/state.h"
 #include "../lib/lcd/lcd.h"
 // #include "../lib/btns/btns.h"
 

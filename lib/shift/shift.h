@@ -4,7 +4,7 @@
 #include <avr/io.h> 
 #include <util/delay.h>
 #include <stdint.h>
-#include "../ui/ui.h"
+#include "../state/state.h"
 
 // update if circuit has a different number of shift registers
 #define NUM_SR 4
