@@ -55,7 +55,8 @@ int main() {
         // if (btn_state(&btns, SH0)) {
             byte_chaser(&sr, &st, NUM_SR, (st.btn_state & (1 << B6)), 0);
         } else if (st.btn_state & (1 << B7)) {
-            chaser(&sr, &st, NUM_SR, (st.btn_state & (1 << B6)), 0);
+            bit_chaser(&sr, &st, NUM_SR);
+            // chaser(&sr, &st, NUM_SR, (st.btn_state & (1 << B6)), 0);
         } else {
             onoff(&sr, &st, NUM_SR, 1, LCD); // all bits on
         }

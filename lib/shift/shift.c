@@ -83,28 +83,31 @@ void onoff(shiftReg *sr, state *st, int num_sr, int on, uint8_t lcd) {
     pulse_pin(sr, 1); // pulse latch
 }
 
-// optimized chaser func
-void chaser(shiftReg *sr, state *st, int num_sr, uint8_t rev, uint8_t lcd) {
-    uint8_t bits = num_sr * 8;
-    uint64_t bitmask = rev ? (1ULL << (bits - 1)) : 1ULL;
-    for (uint64_t i = 0; i < bits; i++) {
+// Chaser without 64-bit math
+void bit_chaser(shiftReg *sr, state *st, uint8_t num_sr) {
+    uint8_t total_bits = num_sr * 8;
+
+    for (uint8_t pos = 0; pos < total_bits; pos++) {
         if (state_changed(st)) {
-            return; // return if state changed
+            return; // abort if state changed
         }
-        set_brt(); // set brightness
-        for (int b = (bits - 1); b >= 0; b--) {
-            if (bitmask & (1ULL << b)) {
-                PORTD |= sr->ser;
+
+        // Send out all bits for all registers
+        for (int8_t b = total_bits - 1; b >= 0; b--) {
+            if (b == pos) {
+                PORTD |= sr->ser;   // set SER high at current chaser bit
             } else {
-                PORTD &= ~sr->ser;
+                PORTD &= ~sr->ser;  // otherwise low
             }
-            pulse_pin(sr, 0);
+            pulse_pin(sr, 0);       // clock the bit into the chain
         }
-        pulse_pin(sr, 1);
-        del();
-        bitmask = rev ? (bitmask >> 1) : (bitmask << 1);
-    } 
+
+        pulse_pin(sr, 1);   // latch output
+        del();              // delay for visible chaser speed
+    }
 }
+
+
 
 void byte_chaser(shiftReg *sr, state *st, int num_sr, uint8_t rev, uint8_t lcd) {
     uint8_t bits = num_sr * 8;
