@@ -46,10 +46,11 @@ uint8_t read_btns() {
 // read state, check if it's different than retained state
 uint8_t state_changed(state *st) {
     // read current buttons state
+    uint8_t prev = st->btn_now;
     st->btn_now = read_btns();
 
     // xor to detect changes
-    uint8_t rising = ((~(st->btn_state)) & st->btn_now);
+    uint8_t rising = (~prev) & st->btn_now;
 
     // flip changed bits
     if (rising) {
