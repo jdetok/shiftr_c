@@ -29,8 +29,6 @@ void set_brt(); // set shift register LED brightness
 void del(); // calls delay_ms_var with variable delay from speed pot 
 void pulse_pin(shiftReg *sr, uint8_t clk_latch); // set/clear clock or latch bit
 void onoff(shiftReg *sr, state *st, int num_sr, int on, uint8_t lcd); // all bits on/off
-// void chaser(shiftReg *sr, state *st, int num_sr, uint8_t rev, uint8_t lcd); // single bit
 void byte_chaser(shiftReg *sr, state *st, int num_sr, uint8_t rev, uint8_t lcd); // byte
-// void mode_selector(shiftReg *sr, state *st, uint8_t mode, uint8_t lcd); // call chaser
 void bit_chaser(shiftReg *sr, state *st, uint8_t num_sr);
 #endif
