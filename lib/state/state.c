@@ -20,7 +20,6 @@ uint8_t read_btns() {
     uint8_t val = 0;
 
     // pl pulse, parallel inputs into shift register
-    // note, removed a delay
     PORTB &= ~PL_PIN;
     PORTB |= PL_PIN;
 

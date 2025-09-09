@@ -83,27 +83,26 @@ void onoff(shiftReg *sr, state *st, int num_sr, int on, uint8_t lcd) {
     pulse_pin(sr, 1); // pulse latch
 }
 
-// Chaser without 64-bit math
-void bit_chaser(shiftReg *sr, state *st, uint8_t num_sr) {
+void bit_chaser(shiftReg *sr, state *st, uint8_t num_sr, uint8_t rev) {
     uint8_t total_bits = num_sr * 8;
 
-    for (uint8_t pos = 0; pos < total_bits; pos++) {
+    for (uint8_t step = 0; step < total_bits; step++) {
         if (state_changed(st)) {
             return; // abort if state changed
         }
 
-        // Send out all bits for all registers
+        uint8_t pos = rev ? (total_bits - 1 - step) : step;
         for (int8_t b = total_bits - 1; b >= 0; b--) {
             if (b == pos) {
-                PORTD |= sr->ser;   // set SER high at current chaser bit
+                PORTD |= sr->ser;
             } else {
-                PORTD &= ~sr->ser;  // otherwise low
+                PORTD &= ~sr->ser;
             }
-            pulse_pin(sr, 0);       // clock the bit into the chain
+            pulse_pin(sr, 0);
         }
 
-        pulse_pin(sr, 1);   // latch output
-        del();              // delay for visible chaser speed
+        pulse_pin(sr, 1);
+        del();
     }
 }
 
