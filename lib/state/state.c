@@ -10,6 +10,11 @@ void btns_init(state *st) {
     st->btn_state = st->btn_now;
 }
 
+// pass a single button (use BTN* macros), whether its bit is set
+uint8_t ison(state *st, uint8_t btn) {
+    return (st->btn_state & btn);
+}
+
 // print out full 8 bit button state
 void print_state(state *st) {
     char binval[9];

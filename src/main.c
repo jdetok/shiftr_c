@@ -3,7 +3,7 @@
 #include "../lib/shift/shift.h"
 #include "../lib/state/state.h"
 #include "../lib/lcd/lcd.h"
-// #include "../lib/btns/btns.h"
+#include "../lib/fx/fx.h"
 
 #define LCD 1 // change to 0 if no lcd screen connected
 
@@ -39,17 +39,18 @@ int main() {
         if (!(PWR_ON)) {
             onoff(&sr, &st, NUM_SR, 0, LCD);
             continue;
-        }
-
-        // read buttons for sequencing
-        if (st.btn_state & (1 << B0)) {
-        // if (btn_state(&btns, SH0)) {
-            byte_chaser(&sr, &st, NUM_SR, (st.btn_state & (1 << B6)), 0);
-        } else if (st.btn_state & (1 << B7)) {
-            bit_chaser(&sr, &st, NUM_SR, (st.btn_state & (1 << B6)));
-            // chaser(&sr, &st, NUM_SR, (st.btn_state & (1 << B6)), 0);
         } else {
-            onoff(&sr, &st, NUM_SR, 1, LCD); // all bits on
+            mode_switcher(&st, &sr, LCD);
         }
+        
+        // read buttons for sequencing
+        // if (st.btn_state & BTN1) {
+        // // if (btn_state(&btns, SH0)) {
+        //     byte_chaser(&sr, &st, NUM_SR, (st.btn_state & BTN7), 0);
+        // } else if (st.btn_state & BTN8) {
+        //     // chaser(&sr, &st, NUM_SR, (st.btn_state & (1 << B6)), 0);
+        // } else {
+        //     onoff(&sr, &st, NUM_SR, 1, LCD); // all bits on
+        // }
     }
 }

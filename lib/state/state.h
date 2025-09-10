@@ -25,16 +25,19 @@
 
 // buttons
 typedef enum {
-    B0,
-    B1,
-    B2,
-    B3,
-    B4,
-    B5,
-    B6,
-    B7,
+    B0, B1, B2, B3, B4, B5, B6, B7,
     BTN_CNT // number of buttons (8)
 } btn_id;
+
+// button bit positions
+#define BTN1 (1 << B0)
+#define BTN2 (1 << B1)
+#define BTN3 (1 << B2)
+#define BTN4 (1 << B3)
+#define BTN5 (1 << B4)
+#define BTN6 (1 << B5)
+#define BTN7 (1 << B6)
+#define BTN8 (1 << B7)
 
 typedef struct {
     uint8_t btn_now; // current buttons reading
@@ -45,6 +48,7 @@ void btns_init(state *st);
 void print_state(state *st);
 uint8_t read_btns();
 uint8_t state_changed(state *st);
+uint8_t ison(state *st, uint8_t btn);
 
 // pots
 void pot_init(); // setup potentiometers to utilize PWM

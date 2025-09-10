@@ -4,9 +4,8 @@
 // setup analog pins
 void pot_init() {
     // Reference = AVcc (5V) with external capacitor at AREF
-    ADMUX = (1 << REFS0);
-
     // Enable ADC, prescaler = 128 -> ADC clock = 16 MHz / 128 = 125 kHz
+    ADMUX = (1 << REFS0);
     ADCSRA = (1 << ADEN)  | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
 }
 
@@ -19,14 +18,11 @@ void oe_pwm() {
 
 // read analog channel
 uint8_t read_pot(uint8_t channel) {
-    // select channel (0–7), clear MUX bits first
-    ADMUX = (ADMUX & 0xF0) | (channel & 0x0F);
+    
+    ADMUX = (ADMUX & 0xF0) | (channel & 0x0F); // select chnl (0–7), clear mux
+    ADCSRA |= (1 << ADSC); // start conversion
 
-    // start conversion
-    ADCSRA |= (1 << ADSC);
-
-    // wait for conversion to finish
-    while (ADCSRA & (1 << ADSC));
+    while (ADCSRA & (1 << ADSC)); // wait for conversion to finish
 
     // don't return 255, will turn all LED off
     uint16_t val = ADC >> 2;
