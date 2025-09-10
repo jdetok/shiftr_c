@@ -26,18 +26,22 @@ void pulse(shiftReg *sr, state *st) {
             brt = max_brt;
             continue;
         }
+
         // set brightness
         OCR2B = brt;
 
-        if (brt > 200) {
-            delay_ms_var((read_pot(SPD_POT) * 2)); // delaytime ms
+        if (brt > 230) {
+            _delay_ms(75);
+        } else if (brt > 200) {
+            _delay_ms(50);
+        } else if (brt > 150) {
+            _delay_ms(25);
         } else if (brt < 100) {
-            delay_ms_var((read_pot(SPD_POT) / 2)); // delaytime ms
+            _delay_ms(10);
         } else {
-            delay_ms_var(read_pot(SPD_POT)); // delaytime ms
+            _delay_ms(10);
         }
 
-        // del();
         brt += dir;
 
         if (brt <= 0) {
@@ -54,31 +58,3 @@ void pulse(shiftReg *sr, state *st) {
         lcd_goto_print(0, 9, buf);
     }
 }
-    // read_pot(BRT_POT);
-   
-
-    // for (uint8_t i = 0; i < off; i++) {
-    //     if (state_changed(st)) {return;
-    //     // set i to max brightness if it's <
-    //     } else if (i < read_pot(BRT_POT)) {
-    //         i = read_pot(BRT_POT);
-    //         continue;
-    //     } else if (i == (off - 1)) { // i set as brightness
-    //         for (uint8_t r = i; r > 0; r--) {
-    //             if (state_changed(st)) {
-    //                 return;
-    //             } else if (r > read_pot(BRT_POT)) {
-    //                 r = read_pot(BRT_POT);
-    //                 continue;
-    //             } else {
-    //                 OCR2B = r; 
-    //                 del();
-    //             }
-    //         }
-    //     } else {
-    //         OCR2B = i; 
-    //         del();
-    //     }   
-    // }
-// }
-
