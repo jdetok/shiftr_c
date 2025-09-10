@@ -8,6 +8,7 @@
 
 // update if circuit has a different number of shift registers
 #define NUM_SR 4
+#define BITS (NUM_SR * 8)
 
 // digital pins for shift register
 #define SER (1 << PD2) // D2

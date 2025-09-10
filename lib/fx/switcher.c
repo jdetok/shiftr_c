@@ -1,23 +1,30 @@
 #include "fx.h"
 
-// turn off all lights // lcd 0 or 1 to enable prints
-void onoff(shiftReg *sr, state *st, int num_sr, int on, uint8_t lcd) {
-    int bits = num_sr * 8;
-    for (int i = 0; i < bits; i++) {
-        // uint8_t interrupt = update_states(sw);
+void leds_off(shiftReg *sr, state *st) {
+    lcd_goto_print(0, 0, "LEDs off\0");
+    for (uint8_t i = 0; i < BITS; i++) {
+        if (state_changed(st)) {
+            return;
+        } else {
+            PORTD &= ~(sr->ser);
+            pulse_pin(sr, 0);
+        }
+    }
+    pulse_pin(sr, 1);
+}
+
+void leds_on(shiftReg *sr, state *st) {
+    lcd_goto_print(0, 0, "LEDs on!\0");
+    for (uint8_t i = 0; i < BITS; i++) {
         if (state_changed(st)) {
             return;
         } else {
             set_brt();
-            if (on) {
-                PORTD |= sr->ser;
-            } else {
-                PORTD &= ~sr->ser;
-            }
-            pulse_pin(sr, 0); // pulse clock
+            PORTD |= sr->ser;
+            pulse_pin(sr, 0);
         }
     }
-    pulse_pin(sr, 1); // pulse latch
+    pulse_pin(sr, 1);
 }
 
 void mode_switcher(state *st, shiftReg *sr, uint8_t lcd_on) {
@@ -29,15 +36,14 @@ void mode_switcher(state *st, shiftReg *sr, uint8_t lcd_on) {
     been written
     */
    if (!(ison(st, BTN1))) {
-            onoff(sr, st, NUM_SR, 1, lcd_on);
-            return;
+        leds_on(sr, st);
+        return;
+   } else {
+        if (!(ison(st, BTN3))) {
+            bit_chaser(sr, st, NUM_SR, ison(st, BTN8));
         } else {
-            // this is where mode_switcher will be called
-            if (!(ison(st, BTN3))) {
-                bit_chaser(sr, st, NUM_SR, ison(st, BTN8));
-            } else {
-                byte_chaser(sr, st, NUM_SR, ison(st, BTN8), 0);
-            }
+            byte_chaser(sr, st, NUM_SR, ison(st, BTN8), 0);
         }
+    }
 
 }

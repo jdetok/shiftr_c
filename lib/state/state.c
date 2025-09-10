@@ -22,7 +22,7 @@ void print_state(state *st) {
         binval[7 - b] = (st->btn_state & (1 << b)) ? '1' : '0';
     }
     binval[8] = '\0';
-    lcd_goto_print(0, 0, binval);
+    lcd_goto_print(1, 0, binval);
 }
 
 uint8_t read_btns() {

@@ -12,10 +12,13 @@
 void mode_switcher(state *st, shiftReg *sr, uint8_t lcd_on);
 
  // all bits on/off
-void onoff(shiftReg *sr, state *st, int num_sr, int on, uint8_t lcd);
+void leds_off(shiftReg *sr, state *st);
+void leds_on(shiftReg *sr, state *st);
 
 // chaser effects
 void byte_chaser(shiftReg *sr, state *st, int num_sr, uint8_t rev, uint8_t lcd);
 void bit_chaser(shiftReg *sr, state *st, uint8_t num_sr, uint8_t rev);
+
+void pulse();
 
 #endif

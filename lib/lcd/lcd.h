@@ -27,6 +27,8 @@ void lcd_data(uint8_t data);
 void lcd_print(const char *str);
 void lcd_goto(uint8_t row, uint8_t col);
 void lcd_clear(void);
+void lcd_clear_row(uint8_t row);
+void lcd_print_row(uint8_t row, const char *str);
 void lcd_clr_print(uint8_t row, uint8_t col, const char *str);
 void lcd_goto_print(uint8_t row, uint8_t col, const char *str);
 #endif

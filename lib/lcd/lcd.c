@@ -72,6 +72,21 @@ void lcd_goto_print(uint8_t row, uint8_t col, const char *str) {
     lcd_print(str);
 }
 
+// clear specified row
+void lcd_clear_row(uint8_t row) {
+    lcd_goto(row, 0);
+    for (uint8_t i = 0; i < 16; i++) {
+        lcd_data(' ');
+    }
+}
+
+// print a row (clears it first)
+void lcd_print_row(uint8_t row, const char *str) {
+    lcd_clear_row(row);
+    lcd_goto(row, 0);
+    lcd_print(str);
+}
+
 void lcd_init(void) {
     // configure pins as outputs
     SR_SER_DDR   |= (1 << SR_SER_PIN);

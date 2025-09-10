@@ -37,20 +37,10 @@ int main() {
         
         // all LEDs off if power switch is off
         if (!(PWR_ON)) {
-            onoff(&sr, &st, NUM_SR, 0, LCD);
+            leds_off(&sr, &st);
             continue;
         } else {
             mode_switcher(&st, &sr, LCD);
         }
-        
-        // read buttons for sequencing
-        // if (st.btn_state & BTN1) {
-        // // if (btn_state(&btns, SH0)) {
-        //     byte_chaser(&sr, &st, NUM_SR, (st.btn_state & BTN7), 0);
-        // } else if (st.btn_state & BTN8) {
-        //     // chaser(&sr, &st, NUM_SR, (st.btn_state & (1 << B6)), 0);
-        // } else {
-        //     onoff(&sr, &st, NUM_SR, 1, LCD); // all bits on
-        // }
     }
 }
