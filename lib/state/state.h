@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <avr/io.h>
 #include <util/delay.h>
+#include "../lcd/lcd.h"
 
 #define PWR_SW (1 << PB5) // digital pin 13
 #define PWR_ON (PINB & PWR_SW) // check d13 state
@@ -40,9 +41,9 @@ typedef struct {
     uint8_t btn_state; // persistant button state
 } state;
 
-void btns_init();
+void btns_init(state *st);
+void print_state(state *st);
 uint8_t read_btns();
-void state_init(state *st);
 uint8_t state_changed(state *st);
 
 // pots

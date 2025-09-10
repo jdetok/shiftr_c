@@ -1,19 +1,23 @@
 #include "state.h"
 
-/* TODO:
-create a single struct that stores buttons state and switch state
-- since there's only one switch, i should just manually read that pin
-*/
-
-void btns_init() {
+void btns_init(state *st) {
+    // set pins as input/output
     DDRB |= CE_PIN | CLK_PIN | PL_PIN; // input sr output pins
     DDRB &= ~DATA_PIN; // data in as input
-}
-
-void state_init(state *st) {
-    // set btn_now and btn_state as reading
+    
+    // init state
     st->btn_now = read_btns();
     st->btn_state = st->btn_now;
+}
+
+// print out full 8 bit button state
+void print_state(state *st) {
+    char binval[9];
+    for (int b = 7; b >= 0; b--) {
+        binval[7 - b] = (st->btn_state & (1 << b)) ? '1' : '0';
+    }
+    binval[8] = '\0';
+    lcd_goto_print(0, 0, binval);
 }
 
 uint8_t read_btns() {
@@ -29,6 +33,7 @@ uint8_t read_btns() {
     for (uint8_t i = 0; i < 8; i++) {
         val <<= 1; // left shift 1
 
+        // if bit is set, button is not pressed
         if (PINB & DATA_PIN) {
             val |= 1; // shift in a 1 to most sig bit (rightmost)
         }
@@ -39,6 +44,7 @@ uint8_t read_btns() {
     }
     PORTB |= CE_PIN; // disable clock
 
+    // return inverse since buttons are pulled to ground
     return ~val;
 }
 
