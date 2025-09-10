@@ -2,6 +2,7 @@
 #define FX_H
 
 #include <stdint.h>
+#include <stdlib.h>
 #include <avr/io.h>
 #include <util/delay.h>
 #include "../lcd/lcd.h"
@@ -19,6 +20,7 @@ void leds_on(shiftReg *sr, state *st);
 void byte_chaser(shiftReg *sr, state *st, int num_sr, uint8_t rev, uint8_t lcd);
 void bit_chaser(shiftReg *sr, state *st, uint8_t num_sr, uint8_t rev);
 
-void pulse();
+// solid LED pulse
+void pulse(shiftReg *sr, state *st);
 
 #endif

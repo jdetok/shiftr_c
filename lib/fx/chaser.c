@@ -10,6 +10,7 @@ void bit_chaser(shiftReg *sr, state *st, uint8_t num_sr, uint8_t rev) {
 
         uint8_t pos = rev ? (total_bits - 1 - step) : step;
         for (int8_t b = total_bits - 1; b >= 0; b--) {
+            set_brt();
             if (b == pos) {
                 PORTD |= sr->ser;
             } else {

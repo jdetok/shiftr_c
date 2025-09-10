@@ -39,11 +39,16 @@ void mode_switcher(state *st, shiftReg *sr, uint8_t lcd_on) {
         leds_on(sr, st);
         return;
    } else {
-        if (!(ison(st, BTN3))) {
-            bit_chaser(sr, st, NUM_SR, ison(st, BTN8));
-        } else {
-            byte_chaser(sr, st, NUM_SR, ison(st, BTN8), 0);
-        }
+        if (!(ison(st, BTN2))) { // BTN2 off, chaser funcs
+            if (!(ison(st, BTN3))) {
+                bit_chaser(sr, st, NUM_SR, ison(st, BTN8));
+            } else {
+                byte_chaser(sr, st, NUM_SR, ison(st, BTN8), 0);
+            }
+        } else { // BTN2 on, pulse funcs
+            pulse(sr, st);
+        }   
+        
     }
 
 }
