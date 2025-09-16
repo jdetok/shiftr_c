@@ -12,8 +12,8 @@
 #define PWR_ON (PINB & PWR_SW) // check d13 state
 
 // ADC channels correlating with analog pins
-#define BRT_POT 0
-#define SPD_POT 1
+#define BRT_POT 1
+#define SPD_POT 0
 #define MOD_POT 2
 #define RGB_POT 3
 
