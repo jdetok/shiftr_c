@@ -18,6 +18,7 @@
 #define RGB_POT 3
 
 // BUTTONS inputs Bift register 74HC165 pins 
+// FOR PCB: switch D9 and D10
 #define CE_PIN (1 << PB1) // D9 | chip pin 15 
 #define DATA_PIN (1 << PB2) // D10 | chip pin 7
 #define CLK_PIN (1 << PB3) // D11 | chip pin 2

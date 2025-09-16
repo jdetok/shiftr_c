@@ -20,7 +20,8 @@ void pulse(shiftReg *sr, state *st) {
     // uint8_t brt = read_pot(BRT_POT);
 
     while (!(state_changed(st))) {
-        uint8_t max_brt = read_pot(BRT_POT);
+        // uint8_t max_brt = read_pot(BRT_POT);
+        uint8_t max_brt = 255;
 
         if (brt > max_brt) {
             brt = max_brt;
@@ -29,7 +30,7 @@ void pulse(shiftReg *sr, state *st) {
 
         // set brightness
         OCR2B = brt;
-
+ 
         if (brt > 230) {
             _delay_ms(75);
         } else if (brt > 200) {

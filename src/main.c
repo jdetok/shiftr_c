@@ -41,6 +41,7 @@ int main() {
             continue;
         } else {
             mode_switcher(&st, &sr, LCD);
+            // bit_chaser(&sr, &st, NUM_SR, ison(&st, BTN8));
         }
     }
 }
