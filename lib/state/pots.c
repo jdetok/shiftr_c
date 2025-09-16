@@ -24,12 +24,10 @@ uint8_t read_pot(uint8_t channel) {
 
     while (ADCSRA & (1 << ADSC)); // wait for conversion to finish
 
-    // don't return 255, will turn all LED off
-    uint16_t val = ADC >> 2;
-    if (val > 254) {
-        return 254;
-    // } else if (val <= 20) {
-    //     return 0;
+    // inverse val here to correct pot direction
+    uint16_t val = ~(ADC >> 2);
+    if (val <= 10) {
+        return 10;
     }
     return val;
 }
