@@ -20,8 +20,8 @@
 // BUTTONS inputs Bift register 74HC165 pins 
 // FOR PCB: switch D9 and D10
 #define CE_PIN (1 << PB1) // D9 | chip pin 15 
-#define DATA_PIN (1 << PB2) // D10 | chip pin 7
 #define CLK_PIN (1 << PB3) // D11 | chip pin 2
+#define DATA_PIN (1 << PB2) // D10 `| chip pin 7
 #define PL_PIN (1 << PB4) // D12 | chip pin 1 | referred to as load sometimes
 
 // buttons
