@@ -12,10 +12,10 @@
 #define PWR_ON (PINB & PWR_SW) // check d13 state
 
 // ADC channels correlating with analog pins
-#define BRT_POT 1
-#define SPD_POT 0
-#define MOD_POT 2
-#define RGB_POT 3
+#define BRT_POT 3
+#define SPD_POT 2
+#define MOD_POT 1
+#define RGB_POT 0
 
 // BUTTONS inputs Bift register 74HC165 pins 
 // FOR PCB: switch D9 and D10

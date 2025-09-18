@@ -25,9 +25,16 @@ uint8_t read_pot(uint8_t channel) {
     while (ADCSRA & (1 << ADSC)); // wait for conversion to finish
 
     // inverse val here to correct pot direction
-    uint16_t val = ~(ADC >> 2);
+    uint16_t val = ADC >> 2;
+
+    char buf[4];
+    itoa(val, buf, 10);
+    lcd_goto_print(0, 9, "   ");
+    lcd_goto_print(0, 9, buf);
+
     if (val <= 10) {
-        return 10;
+        return 254;
     }
-    return val;
+
+    return ~val;
 }
